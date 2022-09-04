@@ -20,11 +20,11 @@ int main(void) {
     CLKCTRL.MCLKCTRLB = 0; //Clock Div = 1
     
     uart0_init(BAUD_RATE);
-    I2cInitialize();
+    uart0_send_string((char*)"Starting up...\r\n");
     
+    I2cInitialize();
     Mpu_6050_initialize();
     
-    uart0_send_string((char*)"Starting up...\r\n");
     uint8_t who_am_i = I2cReadByte(MPU_6050_ADDR, MPU_6050_WHO_AM_I);
     uart0_send_string((char*)" I2C Who am I ->");
     uart0_print_u8(who_am_i);
