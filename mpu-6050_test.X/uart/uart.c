@@ -107,4 +107,10 @@ void uart0_print_u16(uint16_t value) {
     uart0_send_char(DecToAscii(value));
 }
 
-
+void uart0_print_s16(int16_t value) {
+    if (value < 0) {
+        uart0_send_char('-');
+        value = -1 * value;
+    }
+    uart0_print_u16(value);
+}

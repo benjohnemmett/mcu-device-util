@@ -22,6 +22,8 @@
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>main.h</itemPath>
+      <itemPath>mpu_6050.c</itemPath>
+      <itemPath>mpu_6050.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

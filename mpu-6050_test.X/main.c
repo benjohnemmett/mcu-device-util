@@ -10,56 +10,9 @@
 #include "uart/uart.h"
 #include "i2c/i2c.h"
 #include <util/delay.h>
-
-#define MPU_6050_ADDR 0x68
-#define MPUT_6050_WHO_AM_I 0x75
-#define ACCEL_XOUT_H 0x3B
-#define ACCEL_XOUT_L 0x3C
-#define MPU_6050_PWR_MGMT_1 0x6B
-#define MPU_6050_CONFIG 0x1A
-#define MPU_6050_GYRO_CONFIG 0x1B
-#define MPU_6050_ACCEL_CONFIG 0x1C
-#define MPU_6050_INT_ENABLE 0x38
-#define MPU_6050_SIGNAL_PATH_RESET 0x68
+#include "mpu_6050.h"
 
 // Helpful example https://github.com/YifanJiangPolyU/MPU6050/blob/master/mpu6050.c
-
-uint8_t ReadByte(uint8_t addr, uint8_t reg) {
-    I2cSendStart(addr, I2C_WRITE);
-    I2cWrite(reg);
-    I2cSendStart(addr, I2C_READ);
-    uint8_t data = I2cRead(I2C_NACK);
-    I2cSendStop();
-    
-    return data;
-}
-uint16_t ReadUint16(uint8_t addr, uint8_t reg) {
-    I2cSendStart(addr, I2C_WRITE);
-    I2cWrite(reg);
-    I2cSendStart(addr, I2C_READ);
-    uint8_t data_h = I2cRead(I2C_ACK);
-    uint8_t data_l = I2cRead(I2C_NACK);
-    I2cSendStop();
-    
-    return (((uint16_t)data_h) << 8) | ((uint16_t)data_l);
-}
-
-void WriteByte(uint8_t addr, uint8_t reg, uint8_t value) {
-    I2cSendStart(addr, I2C_WRITE);
-    I2cWrite(reg);
-    I2cWrite(value);
-    I2cSendStop();
-}
-
-void WriteBytes(uint8_t addr, uint8_t reg, uint8_t *value, uint8_t length) {
-    I2cSendStart(addr, I2C_WRITE);
-    I2cWrite(reg);
-    for (int i = 0; i < length; i++) {
-        I2cWrite(*value);
-        value++;
-    }
-    I2cSendStop();
-}
 
 int main(void) {
     // Set CPU clock divider to 1
@@ -68,37 +21,31 @@ int main(void) {
     
     uart0_init(BAUD_RATE);
     I2cInitialize();
-    _delay_ms(10);
+    
+    Mpu_6050_initialize();
     
     uart0_send_string((char*)"Starting up...\r\n");
-    uint8_t who_am_i = ReadByte(MPU_6050_ADDR, MPUT_6050_WHO_AM_I);
-    uart0_send_string((char*)"  I am ");
+    uint8_t who_am_i = I2cReadByte(MPU_6050_ADDR, MPU_6050_WHO_AM_I);
+    uart0_send_string((char*)" I2C Who am I ->");
     uart0_print_u8(who_am_i);
-    uart0_send_string((char*)"!\r\n");
-    
-    WriteByte(MPU_6050_ADDR, MPU_6050_PWR_MGMT_1, 0x00);
-    WriteByte(MPU_6050_ADDR, MPU_6050_CONFIG, 0x01);
-    WriteByte(MPU_6050_ADDR, MPU_6050_GYRO_CONFIG, 0x00);
-    WriteByte(MPU_6050_ADDR, MPU_6050_ACCEL_CONFIG, 0x00);
-    WriteByte(MPU_6050_ADDR, MPU_6050_INT_ENABLE, 0x00);
-    WriteByte(MPU_6050_ADDR, MPU_6050_SIGNAL_PATH_RESET, 0x00);
+    uart0_send_string((char*)"\r\n");
     
     while (1) {
+        int16_t accel[3];
+        float accel_m_per_s2[3];
         
-        uint8_t config = ReadByte(MPU_6050_ADDR, MPU_6050_CONFIG);
-        uart0_send_string((char*)"  config = ");
-        uart0_print_u8(config);
+        ReadAccelerations(MPU_6050_ADDR, accel);
+        RawAccelerationToMetersPerSecondSquared(accel, accel_m_per_s2);
+        
+        uart0_send_string((char*)"  ACC_X --> ");
+        uart0_print_s16(((int16_t)(accel_m_per_s2[0]*1000)));
         uart0_send_string((char*)"\r\n");
-        
-        uint16_t acc_x = ReadUint16(MPU_6050_ADDR, ACCEL_XOUT_H);
-        uart0_send_string((char*)"  ACC_X = ");
-        uart0_print_u16(acc_x);
+        uart0_send_string((char*)"  ACC_Y --> ");
+        uart0_print_s16(((int16_t)(accel_m_per_s2[1]*1000)));
         uart0_send_string((char*)"\r\n");
-        
-        who_am_i = ReadByte(MPU_6050_ADDR, MPUT_6050_WHO_AM_I);
-        uart0_send_string((char*)"  I am ");
-        uart0_print_u8(who_am_i);
-        uart0_send_string((char*)"!\r\n");
+        uart0_send_string((char*)"  ACC_Z --> ");
+        uart0_print_s16(((int16_t)(accel_m_per_s2[2]*1000)));
+        uart0_send_string((char*)"\r\n\r\n");
         
         _delay_ms(1000);
     }

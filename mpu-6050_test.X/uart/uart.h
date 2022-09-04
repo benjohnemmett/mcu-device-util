@@ -30,6 +30,8 @@ extern "C" {
     
     void uart0_print_u16(uint16_t value);
     
+    void uart0_print_s16(int16_t value);
+    
 #ifdef	__cplusplus
 }
 #endif
