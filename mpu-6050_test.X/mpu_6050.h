@@ -8,7 +8,7 @@
 #ifndef MPU_6050_H
 #define	MPU_6050_H
 
-#include "i2c/i2c.h"
+#include "../I2C.X/i2c.h"
 
 #define MPU_6050_ADDR 0x68
 #define MPU_6050_WHO_AM_I 0x75

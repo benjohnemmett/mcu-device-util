@@ -12,7 +12,14 @@
 
 #include <avr/io.h>
 #include <util/twi.h>
-#include "../main.h"
+
+#ifndef F_CPU
+#define F_CPU 20000000
+#endif
+
+#ifndef F_SCL
+#define F_SCL 100000
+#endif
 
 #define I2C_WRITE 0
 #define I2C_READ 1
@@ -24,6 +31,7 @@ extern "C" {
 #endif
 
 void I2cInitialize();
+void I2cWaitForReadyFlag();
 uint8_t I2cSendStart(uint8_t client_address, uint8_t is_reading);
 void I2cWrite(uint8_t data);
 uint8_t I2cRead(uint8_t ack);

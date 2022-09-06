@@ -4,10 +4,14 @@
 
 void I2cInitialize() {
     // 25.3.2.1.1 Host Initialization
-    TWI0.CTRLA = TWI_SDAHOLD_50NS_gc;//TWI_SDAHOLD_OFF_gc;
+    TWI0.CTRLA = TWI_SDAHOLD_50NS_gc; //TWI_SDAHOLD_OFF_gc;
     TWI0.MBAUD = TWI0_BAUD(100000);
-    TWI0.MCTRLA = TWI_ENABLE_bm;// | TWI_SMEN_bm;
+    TWI0.MCTRLA = TWI_ENABLE_bm; // | TWI_SMEN_bm;
     TWI0.MSTATUS = TWI_BUSSTATE_IDLE_gc;
+}
+
+void I2cWaitForReadyFlag() {
+    while(!(TWI0.MSTATUS & TWI_CLKHOLD_bm)); // Wait for Clock Hold flag to be high
 }
 
 uint8_t I2cSendStart(uint8_t client_address, uint8_t is_reading) {
@@ -17,14 +21,14 @@ uint8_t I2cSendStart(uint8_t client_address, uint8_t is_reading) {
 }
 
 void I2cWrite(uint8_t data) {
-    while(!(TWI0.MSTATUS & TWI_CLKHOLD_bm)); // Wait for write interrupt flag to be high
+    I2cWaitForReadyFlag();
     TWI0.MCTRLB = TWI_MCMD_RECVTRANS_gc;
     TWI0.MDATA = data;
     while(!(TWI0.MSTATUS & TWI_WIF_bm)); // Wait for write interrupt flag to be high
 }
 
 uint8_t I2cRead(uint8_t ack) {
-    while(!(TWI0.MSTATUS & TWI_CLKHOLD_bm)); // Wait for write interrupt flag to be high
+    I2cWaitForReadyFlag();
     if (ack) {
         TWI0.MCTRLB = TWI_MCMD_RECVTRANS_gc;
     } else { // NACK
@@ -36,7 +40,7 @@ uint8_t I2cRead(uint8_t ack) {
 }
 
 void I2cSendStop() {
-    while(!(TWI0.MSTATUS & TWI_CLKHOLD_bm)); // Wait for write interrupt flag to be high
+    I2cWaitForReadyFlag();
     TWI0.MCTRLB = (TWI_ACKACT_NACK_gc | TWI_MCMD_STOP_gc);
 }
 

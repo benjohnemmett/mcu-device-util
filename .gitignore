@@ -65,3 +65,4 @@ disassembly/
 .generated_files/
 Makefile-*
 private/
+archive/
