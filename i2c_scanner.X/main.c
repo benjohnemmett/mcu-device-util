@@ -8,7 +8,7 @@
 #include <xc.h>
 #include "main.h"
 #include "uart/uart.h"
-#include "i2c/i2c.h"
+#include "../I2C.X/i2c.h"
 #include <util/delay.h>
 
 int main(void) {
