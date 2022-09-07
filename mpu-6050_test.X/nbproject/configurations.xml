@@ -13,10 +13,6 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <logicalFolder name="uart" displayName="uart" projectFiles="true">
-        <itemPath>uart/uart.c</itemPath>
-        <itemPath>uart/uart.h</itemPath>
-      </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>main.h</itemPath>
       <itemPath>mpu_6050.c</itemPath>
@@ -41,7 +37,7 @@
         <targetDevice>ATmega4809</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool>pk4hybrid</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>2.36</languageToolchainVersion>
         <platform>4</platform>
@@ -69,6 +65,23 @@
                             FL="dist/default/production/I2C.X.a"
                             PD="dist/default/production/I2C.X.a"
                             DD="dist/default/debug/I2C.X.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../UART.X"
+                            CT="3"
+                            CN="default"
+                            AC="true"
+                            BL="true"
+                            WD="../UART.X"
+                            BC="${MAKE}  -f Makefile CONF=default"
+                            DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
+                            CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
+                            OP="dist/default/production/UART.X.a"
+                            DOP="dist/default/debug/UART.X.a"
+                            FL="dist/default/production/UART.X.a"
+                            PD="dist/default/production/UART.X.a"
+                            DD="dist/default/debug/UART.X.a">
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>

@@ -2,7 +2,6 @@
 
 //Helpful example: https://github.com/MicrochipTech/TB3216_Getting_Started_with_USART/blob/master/Send_Hello_World/main.c
 
-
 // TODO BJE - make generic for any of the UARTs (0, 1, 2, or 3)
 void uart0_init(unsigned int baud) {
     //1. Set the baud rate (USARTn.BAUD).
@@ -107,4 +106,10 @@ void uart0_print_u16(uint16_t value) {
     uart0_send_char(DecToAscii(value));
 }
 
-
+void uart0_print_s16(int16_t value) {
+    if (value < 0) {
+        uart0_send_char('-');
+        value = -1 * value;
+    }
+    uart0_print_u16(value);
+}

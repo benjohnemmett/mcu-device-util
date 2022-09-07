@@ -6,10 +6,10 @@
  */
 
 #include <xc.h>
-#include "main.h"
-#include "uart/uart.h"
-#include "../I2C.X/i2c.h"
 #include <util/delay.h>
+#include "main.h"
+#include "../UART.X/uart.h"
+#include "../I2C.X/i2c.h"
 
 int main(void) {
     // Set CPU clock divider to 1
@@ -26,7 +26,7 @@ int main(void) {
         if(I2cSendStart(address, I2C_WRITE)) {
             uart0_send_string((char*)"  Found Client at ");
             uart0_print_u8(address);
-            uart0_send_string((char*)"!\r\n");
+            uart0_send_string((char*)"\r\n");
         }
         
         address++;

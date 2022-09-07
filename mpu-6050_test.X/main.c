@@ -6,10 +6,10 @@
  */
 
 #include <xc.h>
-#include "main.h"
-#include "uart/uart.h"
-#include "../I2C.X/i2c.h"
 #include <util/delay.h>
+#include "main.h"
+#include "../UART.X/uart.h"
+#include "../I2C.X/i2c.h"
 #include "mpu_6050.h"
 
 // Helpful example https://github.com/YifanJiangPolyU/MPU6050/blob/master/mpu6050.c
