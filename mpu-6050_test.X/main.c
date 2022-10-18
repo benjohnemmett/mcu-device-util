@@ -5,9 +5,9 @@
  * Created on August 28, 2022, 6:07 PM
  */
 
+#include "main.h"
 #include <xc.h>
 #include <util/delay.h>
-#include "main.h"
 #include "../UART.X/uart.h"
 #include "../I2C.X/i2c.h"
 #include "mpu_6050.h"
