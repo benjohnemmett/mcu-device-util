@@ -8,10 +8,13 @@
 #ifndef PCA9685_H
 #define	PCA9685_H
 
+#define F_CPU 20000000
+
 #include <xc.h>
+#include <util/delay.h>
 
 #define PC9685_ADDR 0x40
-#define PC9685_PRESCAL_50HZ 121
+#define PC9685_PRESCALE_50HZ 129
 
 #define PC9685_REG_MODE1 0x00
 #define PC9685_REG_MODE2 0x01
@@ -21,8 +24,15 @@
 #define PC9685_REG_LED0_OFF_H 0x09
 #define PC9685_REG_PRESCALE 0xFE
 
-#define PC9685_AUTO_INC_BIT 5
-#define PC9685_AUTO_INC_bm (1 << PC9685_AUTO_INC_BIT)
+#define PC9685_NUM_REG_PER_LED 4
+
+// Mode 1 bits
+#define PC9685_SLEEP 4
+#define PC9685_SLEEP_bm (1 << PC9685_SLEEP)
+#define PC9685_AUTO_INC 5
+#define PC9685_AUTO_INC_bm (1 << PC9685_AUTO_INC)
+#define PC9685_RESTART 7
+#define PC9685_RESTART_bm (1 << PC9685_RESTART)
 
 #ifdef	__cplusplus
 extern "C" {
@@ -34,6 +44,7 @@ extern "C" {
     } I2cFunctions;
 
     void SetupPCA9685ForServoControl(I2cFunctions *i2c_functions);
+    void SetLed(I2cFunctions *i2c_functions, uint8_t led_number, uint16_t pulse_width_ticks);
     void RunPca9685Test(I2cFunctions *i2c_functions);
 
 #ifdef	__cplusplus
