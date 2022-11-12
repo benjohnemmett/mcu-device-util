@@ -15,6 +15,8 @@
 
 #define PC9685_ADDR 0x40
 #define PC9685_PRESCALE_50HZ 129
+#define PC9685_PRESCALE_MIN 3
+#define PCA9685_PRESCALE_TO_USE PC9685_PRESCALE_MIN
 
 #define PC9685_REG_MODE1 0x00
 #define PC9685_REG_MODE2 0x01
@@ -34,6 +36,10 @@
 #define PC9685_RESTART 7
 #define PC9685_RESTART_bm (1 << PC9685_RESTART)
 
+// Mode 2 bits
+#define PC9685_OUTDRV 2
+#define PC9685_OUTDRV_bm (1 << PC9685_OUTDRV)
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -43,7 +49,7 @@ extern "C" {
         void (*f_I2cWriteBytes)(uint8_t addr, uint8_t reg, uint8_t *value, uint8_t length);
     } I2cFunctions;
 
-    void SetupPCA9685ForServoControl(I2cFunctions *i2c_functions);
+    void SetupPca9685(I2cFunctions *i2c_functions);
     void SetLed(I2cFunctions *i2c_functions, uint8_t led_number, uint16_t pulse_width_ticks);
     void RunPca9685Test(I2cFunctions *i2c_functions);
 
