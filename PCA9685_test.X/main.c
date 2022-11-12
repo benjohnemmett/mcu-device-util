@@ -11,7 +11,7 @@
 #include "../PCA9685.X/PCA9685.h"
 #include "../I2C.X/i2c.h"
 
-#define PCA9685_PRESCALE_TO_USE PC9685_PRESCALE_MIN
+#define PCA9685_PRESCALE_TO_USE PCA9685_PRESCALE_MIN
 
 I2cFunctions i2c_functions;
 
