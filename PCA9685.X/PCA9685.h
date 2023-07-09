@@ -16,7 +16,6 @@
 #define PCA9685_ADDR 0x40
 #define PCA9685_PRESCALE_50HZ 129
 #define PCA9685_PRESCALE_MIN 3
-#define PCA9685_PRESCALE_TO_USE PCA9685_PRESCALE_MIN
 
 #define PCA9685_REG_MODE1 0x00
 #define PCA9685_REG_MODE2 0x01
@@ -40,18 +39,26 @@
 #define PCA9685_OUTDRV 2
 #define PCA9685_OUTDRV_bm (1 << PCA9685_OUTDRV)
 
+#define PCA9685_MIN_SERVO_PWM_TICKS 205
+#define PCA9685_MAX_SERVO_PWM_TICKS 409
+#define PCA9685_SERVO_PWM_TICKS_CENTER ((PCA9685_MAX_SERVO_PWM_TICKS + PCA9685_MIN_SERVO_PWM_TICKS) >> 1)
+#define PCA9685_SERVO_PWM_TICKS_RANGE (PCA9685_MAX_SERVO_PWM_TICKS - PCA9685_MIN_SERVO_PWM_TICKS)
+#define PCA9685_SERVO_PWM_TICKS_HALF_RANGE ((PCA9685_MAX_SERVO_PWM_TICKS - PCA9685_MIN_SERVO_PWM_TICKS) >> 1)
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
+    
     typedef struct I2cFunctions {
         void (*f_I2cInitialize)();
         void (*f_I2cWriteByte)(uint8_t addr, uint8_t reg, uint8_t value);
         void (*f_I2cWriteBytes)(uint8_t addr, uint8_t reg, uint8_t *value, uint8_t length);
     } I2cFunctions;
 
-    void SetupPca9685(I2cFunctions *i2c_functions);
+    void SetupPca9685(I2cFunctions *i2c_functions, uint8_t prescale);
     void SetLed(I2cFunctions *i2c_functions, uint8_t led_number, uint16_t pulse_width_ticks);
     void RunPca9685LightTest(I2cFunctions *i2c_functions);
+    void RunPca9685ServoTest(I2cFunctions *i2c_functions, uint8_t num_servos);
 
 #ifdef	__cplusplus
 }

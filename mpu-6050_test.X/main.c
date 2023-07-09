@@ -10,20 +10,30 @@
 #include <util/delay.h>
 #include "../UART.X/uart.h"
 #include "../I2C.X/i2c.h"
-#include "mpu_6050.h"
+#include "../MPU-6050.X/mpu_6050.h"
 
 // Helpful example https://github.com/YifanJiangPolyU/MPU6050/blob/master/mpu6050.c
+
+I2cFunctions i2c_functions;
 
 int main(void) {
     // Set CPU clock divider to 1
     CCP = CCP_IOREG_gc; //Configuration Change Protection
     CLKCTRL.MCLKCTRLB = 0; //Clock Div = 1
     
+    i2c_functions.f_I2cInitialize = I2cInitialize;
+    i2c_functions.f_I2cWriteByte = I2cWriteByte;
+    i2c_functions.f_I2cWriteBytes = I2cWriteBytes;
+    i2c_functions.f_I2cSendStart = I2cSendStart;
+    i2c_functions.f_I2cWrite = I2cWrite;
+    i2c_functions.f_I2cRead = I2cRead;
+    i2c_functions.f_I2cSendStop = I2cSendStop;
+    
     uart0_init(BAUD_RATE);
     uart0_send_string((char*)"Starting up...\r\n");
     
     I2cInitialize();
-    Mpu_6050_initialize();
+    Mpu_6050_initialize(&i2c_functions);
     
     uint8_t who_am_i = I2cReadByte(MPU_6050_ADDR, MPU_6050_WHO_AM_I);
     uart0_send_string((char*)" I2C Who am I ->");
@@ -34,7 +44,7 @@ int main(void) {
         int16_t accel[3];
         float accel_m_per_s2[3];
         
-        ReadAccelerations(MPU_6050_ADDR, accel);
+        ReadAccelerations(&i2c_functions, MPU_6050_ADDR, accel);
         RawAccelerationToMetersPerSecondSquared(accel, accel_m_per_s2);
         
         uart0_send_string((char*)"  ACC_X --> ");
