@@ -10,6 +10,7 @@
 #include "../UART.X/uart.h"
 #include "../PCA9685.X/PCA9685.h"
 #include "../I2C.X/i2c.h"
+#include "../I2C.X/i2c_interface.h"
 
 I2cFunctions i2c_functions;
 
@@ -25,9 +26,13 @@ int main(void) {
     uart0_init(BAUD_RATE);
     uart0_send_string("Starting up PCA9685 Test\r\n");
     
-    SetupPca9685(&i2c_functions, PCA9685_PRESCALE_50HZ);
-    uart0_send_string("Running PCA9685 Servo Test \r\n");
-    RunPca9685ServoTest(&i2c_functions, 1);
+//    SetupPca9685(&i2c_functions, PCA9685_PRESCALE_50HZ);
+//    uart0_send_string("Running PCA9685 Servo Test \r\n");
+//    RunPca9685ServoTest(&i2c_functions, 1);
+    
+    SetupPca9685(&i2c_functions, PCA9685_PRESCALE_MIN);
+    uart0_send_string("Running PCA9685 light Test \r\n");
+    RunPca9685LightTest(&i2c_functions);
     
     return 0;
 }

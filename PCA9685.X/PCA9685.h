@@ -12,6 +12,7 @@
 
 #include <xc.h>
 #include <util/delay.h>
+#include "../I2C.X/i2c_interface.h"
 
 #define PCA9685_ADDR 0x40
 #define PCA9685_PRESCALE_50HZ 129
@@ -48,12 +49,6 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
-    
-    typedef struct I2cFunctions {
-        void (*f_I2cInitialize)();
-        void (*f_I2cWriteByte)(uint8_t addr, uint8_t reg, uint8_t value);
-        void (*f_I2cWriteBytes)(uint8_t addr, uint8_t reg, uint8_t *value, uint8_t length);
-    } I2cFunctions;
 
     void SetupPca9685(I2cFunctions *i2c_functions, uint8_t prescale);
     void SetLed(I2cFunctions *i2c_functions, uint8_t led_number, uint16_t pulse_width_ticks);
