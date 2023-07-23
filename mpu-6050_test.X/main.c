@@ -10,6 +10,7 @@
 #include <util/delay.h>
 #include "../UART.X/uart.h"
 #include "../I2C.X/i2c.h"
+#include "../I2C.X/i2c_interface.h"
 #include "../MPU-6050.X/mpu_6050.h"
 
 // Helpful example https://github.com/YifanJiangPolyU/MPU6050/blob/master/mpu6050.c
