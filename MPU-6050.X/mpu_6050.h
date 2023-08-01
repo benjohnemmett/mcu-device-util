@@ -27,6 +27,8 @@ typedef unsigned int uint16_t;
 #define __DEFINED_uint16_t
 #endif
 
+#define GRAVITATIONAL_ACC 9.8
+
 #define MPU_6050_ADDR 0x68
 #define MPU_6050_WHO_AM_I 0x75
 #define MPU_6050_ACCEL_XOUT_H 0x3B
@@ -49,6 +51,10 @@ typedef unsigned int uint16_t;
 #define MPU_6050_INT_ENABLE 0x38
 #define MPU_6050_SIGNAL_PATH_RESET 0x68
 
+#define ACC_LSB_2G 16384.
+#define ACC_LSB_4G 8192.
+#define ACC_LSB_8G 4096.
+#define ACC_LSB_16G 2048.
 #define GYRO_LSB_250_DEG_PER_SEC 131
 #define GYRO_LSB_500_DEG_PER_SEC 65.5
 #define GYRO_LSB_1000_DEG_PER_SEC 32.8
@@ -59,17 +65,22 @@ extern "C" {
 #endif
     
     struct GyroscopeData {
-        int16_t x;
-        int16_t y;
-        int16_t z;
+        int16_t x_deg_per_second;
+        int16_t y_deg_per_second;
+        int16_t z_deg_per_second;
     };
     typedef struct GyroscopeData GyroscopeData;
     
+    struct AccelerationData {
+        float x_mm_per_sec_squared;
+        float y_mm_per_sec_squared;
+        float z_mm_per_sec_squared;
+    };
+    typedef struct AccelerationData AccelerationData;
+    
     void Mpu_6050_initialize(I2cFunctions *i2c_functions);
     
-    void ReadAccelerations(I2cFunctions *i2c_functions, uint8_t addr, int16_t *buffer);
-    
-    void RawAccelerationToMetersPerSecondSquared(int16_t *raw_accel, float *converted_accel);
+    void ReadAccelerometer(I2cFunctions *i2c_functions, uint8_t addr, float lsb_sensitivity, AccelerationData *acceleration_data);
     
     void ReadGyroscope(I2cFunctions *i2c_functions, uint8_t addr, float lsb_sensitivity, GyroscopeData *data_out);
 

@@ -22,24 +22,24 @@ void ReadGyroscope(I2cFunctions *i2c_functions, uint8_t addr, float lsb_sensitiv
     data_h = i2c_functions->f_I2cRead(I2C_ACK);
     data_l = i2c_functions->f_I2cRead(I2C_ACK);
     raw_value = (data_h << 8) | data_l;
-    data_out->x = (raw_value / lsb_sensitivity);
+    data_out->x_deg_per_second = (raw_value / lsb_sensitivity);
     
     data_h = i2c_functions->f_I2cRead(I2C_ACK);
     data_l = i2c_functions->f_I2cRead(I2C_ACK);
     raw_value = (data_h << 8) | data_l;
-    data_out->y = (raw_value / lsb_sensitivity);
+    data_out->y_deg_per_second = (raw_value / lsb_sensitivity);
     
     data_h = i2c_functions->f_I2cRead(I2C_ACK);
     data_l = i2c_functions->f_I2cRead(I2C_ACK);
     raw_value = (data_h << 8) | data_l;
-    data_out->z = (raw_value / lsb_sensitivity);
+    data_out->z_deg_per_second = (raw_value / lsb_sensitivity);
     
     i2c_functions->f_I2cSendStop();
 }
-    
-void ReadAccelerations(I2cFunctions *i2c_functions, uint8_t addr, int16_t *buffer) {
-    
+
+void ReadAccelerometer(I2cFunctions *i2c_functions, uint8_t addr, float lsb_sensitivity, AccelerationData *data_out) {
     uint8_t data_h, data_l;
+    int16_t raw_value;
     
     i2c_functions->f_I2cSendStart(addr, I2C_WRITE);
     i2c_functions->f_I2cWrite(MPU_6050_ACCEL_XOUT_H);
@@ -47,20 +47,18 @@ void ReadAccelerations(I2cFunctions *i2c_functions, uint8_t addr, int16_t *buffe
     
     data_h = i2c_functions->f_I2cRead(I2C_ACK);
     data_l = i2c_functions->f_I2cRead(I2C_ACK);
-    buffer[0] = (data_h << 8) | data_l;
+    raw_value = (data_h << 8) | data_l;
+    data_out->x_mm_per_sec_squared = (raw_value / lsb_sensitivity) * GRAVITATIONAL_ACC;
+    
     data_h = i2c_functions->f_I2cRead(I2C_ACK);
     data_l = i2c_functions->f_I2cRead(I2C_ACK);
-    buffer[1] = (data_h << 8) | data_l;
+    raw_value = (data_h << 8) | data_l;
+    data_out->y_mm_per_sec_squared = (raw_value / lsb_sensitivity) * GRAVITATIONAL_ACC;
+    
     data_h = i2c_functions->f_I2cRead(I2C_ACK);
-    data_l = i2c_functions->f_I2cRead(I2C_NACK);
-    buffer[2] = (data_h << 8) | data_l;
+    data_l = i2c_functions->f_I2cRead(I2C_ACK);
+    raw_value = (data_h << 8) | data_l;
+    data_out->z_mm_per_sec_squared = (raw_value / lsb_sensitivity) * GRAVITATIONAL_ACC;
     
     i2c_functions->f_I2cSendStop();
 }
-
-void RawAccelerationToMetersPerSecondSquared(int16_t *raw_accel, float *converted_accel) {
-    converted_accel[0] = (raw_accel[0] / 16384.) * 9.8;
-    converted_accel[1] = (raw_accel[1] / 16384.) * 9.8;
-    converted_accel[2] = (raw_accel[2] / 16384.) * 9.8;
-}
-

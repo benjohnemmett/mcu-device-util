@@ -17,6 +17,7 @@
 
 I2cFunctions i2c_functions;
 GyroscopeData gyroscope_data;
+AccelerationData acceleration_data;
 
 int main(void) {
     // Set CPU clock divider to 1
@@ -42,32 +43,28 @@ int main(void) {
     uart0_print_u8(who_am_i);
     uart0_send_string((char*)"\r\n");
     
-    while (1) {
-        int16_t accel[3];
-        float accel_m_per_s2[3];
-        
-        ReadAccelerations(&i2c_functions, MPU_6050_ADDR, accel);
-        RawAccelerationToMetersPerSecondSquared(accel, accel_m_per_s2);
+    while (1) {        
+        ReadAccelerometer(&i2c_functions, MPU_6050_ADDR, ACC_LSB_2G, &acceleration_data);
         ReadGyroscope(&i2c_functions, MPU_6050_ADDR, GYRO_LSB_250_DEG_PER_SEC, &gyroscope_data);
         
         uart0_send_string((char*)"  ACC_X: ");
-        uart0_print_s16(((int16_t)(accel_m_per_s2[0]*1000)));
+        uart0_print_s16(((int16_t)(acceleration_data.x_mm_per_sec_squared * 1000)));
         uart0_send_string((char*)"\r\n");
         uart0_send_string((char*)"  ACC_Y: ");
-        uart0_print_s16(((int16_t)(accel_m_per_s2[1]*1000)));
+        uart0_print_s16(((int16_t)(acceleration_data.y_mm_per_sec_squared * 1000)));
         uart0_send_string((char*)"\r\n");
         uart0_send_string((char*)"  ACC_Z: ");
-        uart0_print_s16(((int16_t)(accel_m_per_s2[2]*1000)));
+        uart0_print_s16(((int16_t)(acceleration_data.z_mm_per_sec_squared * 1000)));
         uart0_send_string((char*)"\r\n");
    
         uart0_send_string((char*)"  GYRO_X: ");
-        uart0_print_s16(gyroscope_data.x);
+        uart0_print_s16(gyroscope_data.x_deg_per_second);
         uart0_send_string((char*)"\r\n");
         uart0_send_string((char*)"  GYRO_Y: ");
-        uart0_print_s16(gyroscope_data.y);
+        uart0_print_s16(gyroscope_data.y_deg_per_second);
         uart0_send_string((char*)"\r\n");
         uart0_send_string((char*)"  GYRO_Z: ");
-        uart0_print_s16(gyroscope_data.z);
+        uart0_print_s16(gyroscope_data.z_deg_per_second);
         
         uart0_send_string((char*)"\r\n\r\n");
         
