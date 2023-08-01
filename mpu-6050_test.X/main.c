@@ -16,6 +16,7 @@
 // Helpful example https://github.com/YifanJiangPolyU/MPU6050/blob/master/mpu6050.c
 
 I2cFunctions i2c_functions;
+GyroscopeData gyroscope_data;
 
 int main(void) {
     // Set CPU clock divider to 1
@@ -47,18 +48,30 @@ int main(void) {
         
         ReadAccelerations(&i2c_functions, MPU_6050_ADDR, accel);
         RawAccelerationToMetersPerSecondSquared(accel, accel_m_per_s2);
+        ReadGyroscope(&i2c_functions, MPU_6050_ADDR, GYRO_LSB_250_DEG_PER_SEC, &gyroscope_data);
         
-        uart0_send_string((char*)"  ACC_X --> ");
+        uart0_send_string((char*)"  ACC_X: ");
         uart0_print_s16(((int16_t)(accel_m_per_s2[0]*1000)));
         uart0_send_string((char*)"\r\n");
-        uart0_send_string((char*)"  ACC_Y --> ");
+        uart0_send_string((char*)"  ACC_Y: ");
         uart0_print_s16(((int16_t)(accel_m_per_s2[1]*1000)));
         uart0_send_string((char*)"\r\n");
-        uart0_send_string((char*)"  ACC_Z --> ");
+        uart0_send_string((char*)"  ACC_Z: ");
         uart0_print_s16(((int16_t)(accel_m_per_s2[2]*1000)));
+        uart0_send_string((char*)"\r\n");
+   
+        uart0_send_string((char*)"  GYRO_X: ");
+        uart0_print_s16(gyroscope_data.x);
+        uart0_send_string((char*)"\r\n");
+        uart0_send_string((char*)"  GYRO_Y: ");
+        uart0_print_s16(gyroscope_data.y);
+        uart0_send_string((char*)"\r\n");
+        uart0_send_string((char*)"  GYRO_Z: ");
+        uart0_print_s16(gyroscope_data.z);
+        
         uart0_send_string((char*)"\r\n\r\n");
         
-        _delay_ms(1000);
+        _delay_ms(500);
     }
     
     return 0;

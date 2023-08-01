@@ -11,6 +11,32 @@ void Mpu_6050_initialize(I2cFunctions *i2c_functions) {
     i2c_functions->f_I2cWriteByte(MPU_6050_ADDR, MPU_6050_SIGNAL_PATH_RESET, 0x00);
 }
 
+void ReadGyroscope(I2cFunctions *i2c_functions, uint8_t addr, float lsb_sensitivity, GyroscopeData *data_out) {
+    uint8_t data_h, data_l;
+    int16_t raw_value;
+    
+    i2c_functions->f_I2cSendStart(addr, I2C_WRITE);
+    i2c_functions->f_I2cWrite(MPU_6050_GYRO_XOUT_H);
+    i2c_functions->f_I2cSendStart(addr, I2C_READ);
+    
+    data_h = i2c_functions->f_I2cRead(I2C_ACK);
+    data_l = i2c_functions->f_I2cRead(I2C_ACK);
+    raw_value = (data_h << 8) | data_l;
+    data_out->x = (raw_value / lsb_sensitivity);
+    
+    data_h = i2c_functions->f_I2cRead(I2C_ACK);
+    data_l = i2c_functions->f_I2cRead(I2C_ACK);
+    raw_value = (data_h << 8) | data_l;
+    data_out->y = (raw_value / lsb_sensitivity);
+    
+    data_h = i2c_functions->f_I2cRead(I2C_ACK);
+    data_l = i2c_functions->f_I2cRead(I2C_ACK);
+    raw_value = (data_h << 8) | data_l;
+    data_out->z = (raw_value / lsb_sensitivity);
+    
+    i2c_functions->f_I2cSendStop();
+}
+    
 void ReadAccelerations(I2cFunctions *i2c_functions, uint8_t addr, int16_t *buffer) {
     
     uint8_t data_h, data_l;
