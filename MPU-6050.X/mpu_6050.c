@@ -62,3 +62,15 @@ void ReadAccelerometer(I2cFunctions *i2c_functions, uint8_t addr, float lsb_sens
     
     i2c_functions->f_I2cSendStop();
 }
+
+void SetAccelerometerRange(I2cFunctions *i2c_functions, uint8_t addr, uint8_t range_bitmask) {
+    i2c_functions->f_I2cWriteByte(MPU_6050_ADDR, MPU_6050_ACCEL_CONFIG, range_bitmask);
+}
+
+void SetGyroscopeRange(I2cFunctions *i2c_functions, uint8_t addr, uint8_t range_bitmask) {
+    i2c_functions->f_I2cWriteByte(MPU_6050_ADDR, MPU_6050_GYRO_CONFIG, range_bitmask);
+}
+
+void SetDigitalLowPassFilter(I2cFunctions *i2c_functions, uint8_t addr, uint8_t dlpf_config_bitmask) {
+    i2c_functions->f_I2cWriteByte(MPU_6050_ADDR, MPU_6050_CONFIG, dlpf_config_bitmask);
+}

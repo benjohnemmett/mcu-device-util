@@ -43,9 +43,13 @@ int main(void) {
     uart0_print_u8(who_am_i);
     uart0_send_string((char*)"\r\n");
     
-    while (1) {        
-        ReadAccelerometer(&i2c_functions, MPU_6050_ADDR, ACC_LSB_2G, &acceleration_data);
-        ReadGyroscope(&i2c_functions, MPU_6050_ADDR, GYRO_LSB_250_DEG_PER_SEC, &gyroscope_data);
+    SetAccelerometerRange(&i2c_functions, MPU_6050_ADDR, MPU_6050_ACCEL_RANGE_4G_bm);
+    SetGyroscopeRange(&i2c_functions, MPU_6050_ADDR, MPU_6050_GYRO_RANGE_1000_bm);
+    SetDigitalLowPassFilter(&i2c_functions, MPU_6050_ADDR, MPU_6050_DLPF_ACC_BW_5_HZ_bm);
+    
+    while (1) {
+        ReadAccelerometer(&i2c_functions, MPU_6050_ADDR, ACC_LSB_4G, &acceleration_data);
+        ReadGyroscope(&i2c_functions, MPU_6050_ADDR, GYRO_LSB_1000_DEG_PER_SEC, &gyroscope_data);
         
         uart0_send_string((char*)"  ACC_X: ");
         uart0_print_s16(((int16_t)(acceleration_data.x_mm_per_sec_squared * 1000)));
@@ -68,7 +72,7 @@ int main(void) {
         
         uart0_send_string((char*)"\r\n\r\n");
         
-        _delay_ms(500);
+        _delay_ms(1000);
     }
     
     return 0;

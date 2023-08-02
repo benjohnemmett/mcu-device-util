@@ -51,6 +51,24 @@ typedef unsigned int uint16_t;
 #define MPU_6050_INT_ENABLE 0x38
 #define MPU_6050_SIGNAL_PATH_RESET 0x68
 
+#define MPU_6050_GYRO_RANGE_250_bm 0x00
+#define MPU_6050_GYRO_RANGE_500_bm 0x01 << 3
+#define MPU_6050_GYRO_RANGE_1000_bm 0x02 << 3
+#define MPU_6050_GYRO_RANGE_2000_bm 0x03 << 3
+
+#define MPU_6050_ACCEL_RANGE_2G_bm 0x00
+#define MPU_6050_ACCEL_RANGE_4G_bm 0x01 << 3
+#define MPU_6050_ACCEL_RANGE_8G_bm 0x02 << 3
+#define MPU_6050_ACCEL_RANGE_16G_bm 0x03 << 3
+
+#define MPU_6050_DLPF_ACC_BW_260_HZ_bm 0x00
+#define MPU_6050_DLPF_ACC_BW_184_HZ_bm 0x01
+#define MPU_6050_DLPF_ACC_BW_94_HZ_bm 0x02
+#define MPU_6050_DLPF_ACC_BW_44_HZ_bm 0x03
+#define MPU_6050_DLPF_ACC_BW_21_HZ_bm 0x04
+#define MPU_6050_DLPF_ACC_BW_10_HZ_bm 0x05
+#define MPU_6050_DLPF_ACC_BW_5_HZ_bm 0x06
+
 #define ACC_LSB_2G 16384.
 #define ACC_LSB_4G 8192.
 #define ACC_LSB_8G 4096.
@@ -83,6 +101,12 @@ extern "C" {
     void ReadAccelerometer(I2cFunctions *i2c_functions, uint8_t addr, float lsb_sensitivity, AccelerationData *acceleration_data);
     
     void ReadGyroscope(I2cFunctions *i2c_functions, uint8_t addr, float lsb_sensitivity, GyroscopeData *data_out);
+    
+    void SetAccelerometerRange(I2cFunctions *i2c_functions, uint8_t addr, uint8_t range_bitmask);
+    
+    void SetGyroscopeRange(I2cFunctions *i2c_functions, uint8_t addr, uint8_t range_bitmask);
+    
+    void SetDigitalLowPassFilter(I2cFunctions *i2c_functions, uint8_t addr, uint8_t dlpf_config_bitmask);
 
 #ifdef	__cplusplus
 }
