@@ -39,7 +39,8 @@ void I2cSendStop();
 
 // Higher level
 uint8_t I2cReadByte(uint8_t addr, uint8_t reg);
-int16_t I2cReadUint16(uint8_t addr, uint8_t reg);
+uint16_t I2cReadUint16(uint8_t addr, uint8_t reg);
+void I2cReadBytes(uint8_t addr, uint8_t reg, uint8_t *buffer, uint16_t length);
 void I2cWriteByte(uint8_t addr, uint8_t reg, uint8_t value);
 void I2cWriteBytes(uint8_t addr, uint8_t reg, uint8_t *value, uint8_t length);
 

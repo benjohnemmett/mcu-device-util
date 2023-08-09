@@ -2,6 +2,8 @@
 
 //Helpful example: https://github.com/MicrochipTech/TB3216_Getting_Started_with_USART/blob/master/Send_Hello_World/main.c
 
+#define MAXBUF (sizeof(long int) * 8)
+
 // TODO BJE - make generic for any of the UARTs (0, 1, 2, or 3)
 void uart0_init(unsigned int baud) {
     //1. Set the baud rate (USARTn.BAUD).
@@ -112,4 +114,20 @@ void uart0_print_s16(int16_t value) {
         value = -1 * value;
     }
     uart0_print_u16(value);
+}
+
+//  Based on https://opensource.apple.com/source/xnu/xnu-201/osfmk/kern/printf.c.auto.html
+void uart0_print_num(unsigned long value, int base) {
+    char buffer[MAXBUF];
+	register char *buffer_pointer = &buffer[MAXBUF-1];
+	static char digits[] = "0123456789ABCDEF";
+    
+    do {
+        *buffer_pointer-- = digits[value % base];
+        value /= base;
+    } while (value != 0);
+    
+    while (++buffer_pointer != &buffer[MAXBUF]) {
+        uart0_send_char(*buffer_pointer);
+    }
 }

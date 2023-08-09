@@ -27,6 +27,9 @@ extern "C" {
         void (*f_I2cInitialize)();
         void (*f_I2cWriteByte)(uint8_t addr, uint8_t reg, uint8_t value);
         void (*f_I2cWriteBytes)(uint8_t addr, uint8_t reg, uint8_t *value, uint8_t length);
+        uint8_t (*f_I2cReadByte)(uint8_t addr, uint8_t reg);
+        void (*f_I2cReadBytes)(uint8_t addr, uint8_t reg, uint8_t *buffer, uint16_t length);
+
     } I2cFunctions;
 
 #ifdef	__cplusplus

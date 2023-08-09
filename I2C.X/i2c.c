@@ -54,7 +54,7 @@ uint8_t I2cReadByte(uint8_t addr, uint8_t reg) {
     return data;
 }
 
-int16_t I2cReadUint16(uint8_t addr, uint8_t reg) {
+uint16_t I2cReadUint16(uint8_t addr, uint8_t reg) {
     I2cSendStart(addr, I2C_WRITE);
     I2cWrite(reg);
     I2cSendStart(addr, I2C_READ);
@@ -63,6 +63,17 @@ int16_t I2cReadUint16(uint8_t addr, uint8_t reg) {
     I2cSendStop();
     
     return ((data_h) << 8) | (data_l);
+}
+
+void I2cReadBytes(uint8_t addr, uint8_t reg, uint8_t *buffer, uint16_t length) {
+    I2cSendStart(addr, I2C_WRITE);
+    I2cWrite(reg);
+    I2cSendStart(addr, I2C_READ);
+    for (uint16_t i = 0; i < length; i++) {
+        *buffer = I2cRead(I2C_ACK);
+        buffer++;
+    }
+    I2cSendStop();
 }
 
 void I2cWriteByte(uint8_t addr, uint8_t reg, uint8_t value) {
