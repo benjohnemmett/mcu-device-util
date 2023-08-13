@@ -12,6 +12,7 @@
 
 #include <avr/io.h>
 #include <util/twi.h>
+#include <stdint.h>
 
 #ifndef F_CPU
 #define F_CPU 20000000
