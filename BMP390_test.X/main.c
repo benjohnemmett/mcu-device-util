@@ -92,6 +92,10 @@ int main(void) {
         sprintf(stringBuffer, "Temp is %f F\r\n", temp_f);
         uart0_send_string(stringBuffer);
         
+        float pressure_pa = Bmp390ReadPressureInPa(&i2c_functions, BMP390_ADDRESS, &calibration_data);
+        sprintf(stringBuffer, "Pressure is %f pa\r\n", pressure_pa);
+        uart0_send_string(stringBuffer);
+        
         _delay_ms(5000);
     }
     

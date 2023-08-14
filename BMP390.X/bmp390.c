@@ -73,17 +73,50 @@ float Bmp390ReadTemperatureInC(I2cFunctions *i2c_functions, unsigned char addr, 
     return temperature_c;
 }
 
-float Bmp390ReadPressureInPa(I2cFunctions *i2c_functions, unsigned char addr) {
+uint32_t Bmp390ReadPressureRaw(I2cFunctions *i2c_functions, unsigned char addr) {
     i2c_functions->f_I2cSendStart(addr, I2C_WRITE);
     i2c_functions->f_I2cWrite(BMP390_REG_PRESSURE_DATA_0);
     i2c_functions->f_I2cSendStart(addr, I2C_READ);
-    unsigned char data0 = i2c_functions->f_I2cRead(I2C_ACK);
+    unsigned long lsb = i2c_functions->f_I2cRead(I2C_ACK);
     unsigned long data1 = i2c_functions->f_I2cRead(I2C_ACK);
-    unsigned long data2 = i2c_functions->f_I2cRead(I2C_NACK);
+    unsigned long msb = i2c_functions->f_I2cRead(I2C_NACK);
     i2c_functions->f_I2cSendStop();
+    unsigned long raw_pressure = (msb << 16) | (data1 << 8) | lsb;
     
-    unsigned long raw_pressure = (data2 << 16) | (data1 << 8) | (data0);
-    float pressure_pa =  ((float) raw_pressure) * 2.64;
+    return raw_pressure;
+}
+
+float Bmp390CompensatePressure(uint32_t uncomp_press, Bmp390CalibrationData *calibration_data) {
+    float comp_press;
+    float partial_data1;
+    float partial_data2;
+    float partial_data3;
+    float partial_data4;
+    float partial_out1;
+    float partial_out2;
+    
+    partial_data1 = calibration_data->p6 * calibration_data->t_lin;
+    partial_data2 = calibration_data->p7 * (calibration_data->t_lin * calibration_data->t_lin);
+    partial_data3 = calibration_data->p8 * (calibration_data->t_lin * calibration_data->t_lin * calibration_data->t_lin);
+    partial_out1 = calibration_data->p5 + partial_data1 + partial_data2 + partial_data3;
+    
+    partial_data1 = calibration_data->p2 * calibration_data->t_lin;
+    partial_data2 = calibration_data->p3 * (calibration_data->t_lin * calibration_data->t_lin);
+    partial_data3 = calibration_data->p4 * (calibration_data->t_lin * calibration_data->t_lin * calibration_data->t_lin);
+    partial_out2 = (float)uncomp_press * (calibration_data->p1 + partial_data1 + partial_data2 + partial_data3);
+    
+    partial_data1 = (float)uncomp_press * (float)uncomp_press;
+    partial_data2 = calibration_data->p9 + calibration_data->p10 * calibration_data->t_lin;
+    partial_data3 = partial_data1 * partial_data2;
+    partial_data4 = partial_data3 + ((float)uncomp_press * (float)uncomp_press * (float)uncomp_press) * calibration_data->p11;
+    comp_press = partial_out1 + partial_out2 + partial_data4;
+    
+    return comp_press;
+}
+
+float Bmp390ReadPressureInPa(I2cFunctions *i2c_functions, unsigned char addr, Bmp390CalibrationData *calibration_data) {
+    unsigned long uncomp_pressure = Bmp390ReadPressureRaw(i2c_functions, addr);
+    float pressure_pa = Bmp390CompensatePressure(uncomp_pressure, calibration_data);
     
     return pressure_pa;
 }

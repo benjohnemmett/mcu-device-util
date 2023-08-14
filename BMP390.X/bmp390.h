@@ -128,7 +128,7 @@ extern "C" {
 
     float Bmp390ReadTemperatureInC(I2cFunctions *i2c_functions, unsigned char addr, Bmp390CalibrationData *calibration_data);
             
-    float Bmp390ReadPressureInPa(I2cFunctions *i2c_functions, unsigned char addr);
+    float Bmp390ReadPressureInPa(I2cFunctions *i2c_functions, unsigned char addr, Bmp390CalibrationData *calibration_data);
     
     void Bmp390SetOverSampleRates(I2cFunctions *i2c_functions, unsigned char addr, unsigned char osr_masks);
     
