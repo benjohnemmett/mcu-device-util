@@ -68,19 +68,6 @@
 extern "C" {
 #endif
     
-    struct RawTempData {
-        uint8_t data0;
-        uint8_t data1;
-        uint8_t data2;
-    };
-    typedef struct RawTempData RawTempData;
-
-    struct Bmp390Data {
-        float temperature_c;
-        float pressure_pa;
-    };
-    typedef struct Bmp390Data Bmp390Data;
-    
     struct Bmp390RawTrimmingCoefficients {
         uint16_t t1;
         uint16_t t2;
@@ -123,8 +110,6 @@ extern "C" {
     void Bmp390GetTrimmingCoefficients(I2cFunctions *i2c_functions, char addr, Bmp390RawTrimmingCoefficients *trimming_coefficients);
     
     void Bmp390CalculateCalibrationData(Bmp390RawTrimmingCoefficients *raw_trimming_coefficients, Bmp390CalibrationData *trimming_coefficients);
-    
-    void Bmp390ReadTemperatureRaw(I2cFunctions *i2c_functions, unsigned char addr, RawTempData *data);
 
     float Bmp390ReadTemperatureInC(I2cFunctions *i2c_functions, unsigned char addr, Bmp390CalibrationData *calibration_data);
             

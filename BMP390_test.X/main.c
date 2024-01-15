@@ -84,6 +84,10 @@ int main(void) {
     sprintf(stringBuffer, "p11 = %g\r\n", calibration_data.p11);
     uart0_send_string(stringBuffer);
     
+    Bmp390SetIirFilterCoefficient(&i2c_functions, BMP390_ADDRESS, BMP390_IIR_FILTER_COEF_3_bm);
+    Bmp390SetOverSampleRates(&i2c_functions, BMP390_ADDRESS, BMP390_OSR_PRESSURE_8x_bm & BMP390_OSR_TEMPERATURE_1x_bm);
+    Bmp390SetOutputDataRate(&i2c_functions, BMP390_ADDRESS, BMP390_ODR_6p25_HZ);
+    
     while (1) {
         float temp_c = Bmp390ReadTemperatureInC(&i2c_functions, BMP390_ADDRESS, &calibration_data);
         float temp_f = temp_c * 1.8 + 32;
