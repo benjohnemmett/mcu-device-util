@@ -4,29 +4,107 @@
 
 #define MAXBUF (sizeof(long int) * 8)
 
-// TODO BJE - make generic for any of the UARTs (0, 1, 2, or 3)
-void uart0_init(unsigned int baud) {
+#define UART_ERROR 0
+#define UART_SUCCESS 1
+
+uint8_t _get_uart_reg_ptr(uint8_t uart_number, USART_t** usart_reg_ptr_ptr)
+{
+    switch(uart_number)
+    {
+        case 0:
+            *usart_reg_ptr_ptr = &USART0;
+            return UART_SUCCESS;
+        case 1:
+            *usart_reg_ptr_ptr = &USART1;
+            return UART_SUCCESS;
+        case 2:
+            *usart_reg_ptr_ptr = &USART2;
+            return UART_SUCCESS;
+        case 3:
+            *usart_reg_ptr_ptr = &USART3;
+            return UART_SUCCESS;
+    }
+    return UART_ERROR;
+}
+
+    
+uint8_t uart_init(uint8_t usart_index, unsigned int baud) {
     //1. Set the baud rate (USARTn.BAUD).
-    USART0.BAUD = (uint16_t)USART0_BAUD_RATE(baud);
+    USART_t *usart_regs;
+    if (!_get_uart_reg_ptr(usart_index, &usart_regs))
+    {
+        // Failed to init invalid usart index
+        return UART_ERROR;
+    }
+    
+    usart_regs->BAUD = (uint16_t)USART_BAUD_RATE(baud);
 
     //2. Set the frame format and mode of operation (USARTn.CTRLC).
-    USART0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | 
+    usart_regs->CTRLC = USART_CMODE_ASYNCHRONOUS_gc | 
                    USART_PMODE_DISABLED_gc | 
                    USART_SBMODE_1BIT_gc |
                    USART_CHSIZE_8BIT_gc;
 
     //3. Configure the TXD pin as an output.
-    PORTA.DIRSET = PIN0_bm;
-    PORTA.DIRCLR = PIN1_bm;
+    if (usart_index == 0)
+    {
+        PORTA.DIRSET = PIN0_bm;
+        PORTA.DIRCLR = PIN1_bm;
+    }
+    else if (usart_index == 1)
+    {
+        PORTC.DIRSET = PIN0_bm;
+        PORTC.DIRCLR = PIN1_bm;
+    }
+    else if (usart_index == 2)
+    {
+        PORTF.DIRSET = PIN0_bm;
+        PORTF.DIRCLR = PIN1_bm;
+    }
+    else if (usart_index == 3)
+    {
+        PORTB.DIRSET = PIN0_bm;
+        PORTB.DIRCLR = PIN1_bm;
+    }
 
     //4. Enable the transmitter and the receiver (USARTn.CTRLB).
-    USART0.CTRLB = USART_TXEN_bm | 
+    usart_regs->CTRLB = USART_TXEN_bm | 
                    USART_RXEN_bm;
+    
+    return UART_SUCCESS;
+}
+
+uint8_t uart_send_char(uint8_t usart_index, char value) {
+    USART_t *usart_regs;
+    if (!_get_uart_reg_ptr(usart_index, &usart_regs))
+    {
+        // Failed to init invalid usart index
+        return UART_ERROR;
+    }
+    
+    while(!(usart_regs->STATUS & USART_DREIF_bm)) {}
+    usart_regs->TXDATAL = value;
+    
+    return UART_SUCCESS;
+}
+
+uint8_t uart_send_string(uint8_t usart_index, char *string) {
+    while (string[0]) {
+        if (!uart_send_char(usart_index, string[0]))
+        {
+            return UART_ERROR;
+        }
+        string++;
+    }
+    return UART_SUCCESS;
+}
+
+void uart0_init(unsigned int baud) {
+    uart_init(0, baud);
 }
 
 void uart0_send_char(char value) {
-    while(!(USART0.STATUS & USART_DREIF_bm)) {}
-    USART0.TXDATAL = value;
+    uart_send_char(0, value);
 }
 
 void uart0_send_string(char *string) {
@@ -34,6 +112,27 @@ void uart0_send_string(char *string) {
         uart0_send_char(string[0]);
         string++;
     }
+}
+
+//  Based on https://opensource.apple.com/source/xnu/xnu-201/osfmk/kern/printf.c.auto.html
+uint8_t uart_print_num(uint8_t uart_index, unsigned long value, int base) {
+
+    char buffer[MAXBUF];
+	register char *buffer_pointer = &buffer[MAXBUF-1];
+	static char digits[] = "0123456789ABCDEF";
+    
+    do {
+        *buffer_pointer-- = digits[value % base];
+        value /= base;
+    } while (value != 0);
+    
+    while (++buffer_pointer != &buffer[MAXBUF]) {
+        if(!uart_send_char(uart_index, *buffer_pointer))
+        {
+            return UART_ERROR;
+        }
+    }
+    return UART_SUCCESS;
 }
 
 /*
@@ -116,18 +215,6 @@ void uart0_print_s16(int16_t value) {
     uart0_print_u16(value);
 }
 
-//  Based on https://opensource.apple.com/source/xnu/xnu-201/osfmk/kern/printf.c.auto.html
 void uart0_print_num(unsigned long value, int base) {
-    char buffer[MAXBUF];
-	register char *buffer_pointer = &buffer[MAXBUF-1];
-	static char digits[] = "0123456789ABCDEF";
-    
-    do {
-        *buffer_pointer-- = digits[value % base];
-        value /= base;
-    } while (value != 0);
-    
-    while (++buffer_pointer != &buffer[MAXBUF]) {
-        uart0_send_char(*buffer_pointer);
-    }
+    uart_print_num(0, value, base);
 }

@@ -17,12 +17,20 @@
 #define UART_NORMAL_MODE 16
 #define UART_DOUBLE_SPEED_MODE 8
 
-#define USART0_BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (UART_NORMAL_MODE * (float)BAUD_RATE)) + 0.5)
+#define USART_BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (UART_NORMAL_MODE * (float)BAUD_RATE)) + 0.5)
 
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
+    uint8_t uart_init(uint8_t uart_index, unsigned int baud);
+    
+    uint8_t uart_send_char(uint8_t uart_index, char value);
+    
+    uint8_t uart_send_string(uint8_t uart_index, char *string);
+    
+    uint8_t uart_print_num(uint8_t uart_index, unsigned long value, int base);
+    
     void uart0_init();
     
     void uart0_send_char(char value);
