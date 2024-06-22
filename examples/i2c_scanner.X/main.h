@@ -13,8 +13,8 @@
 
 // Hardware specific includes
 #include <util/delay.h> // TODO abstract the AVR-specific delay functions
-#include "../../uart/UART-ATMega4809.X/uart.h"
-#include "../../i2c/I2C-ATMega4809.X/i2c.h"
+#include "../../uart/uart.h"
+#include "../../i2c/i2c.h"
 
 #ifdef	__cplusplus
 extern "C" {

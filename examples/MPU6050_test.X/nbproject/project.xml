@@ -3,20 +3,28 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>MPU-6050</name>
-            <creation-uuid>8bd6b125-ca58-4a78-b629-ab4f6e91f048</creation-uuid>
+            <name>MPU6050_test</name>
+            <creation-uuid>66ed2e9f-d402-4ab9-bf3d-a172539f468c</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>
             <header-extensions>h</header-extensions>
             <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
-            <make-dep-projects/>
-            <sourceRootList/>
+            <make-dep-projects>
+                <make-dep-project>../../uart/UART-ATMega4809.X</make-dep-project>
+                <make-dep-project>../../i2c/I2C-ATMega4809.X</make-dep-project>
+                <make-dep-project>../../MPU6050.X</make-dep-project>
+            </make-dep-projects>
+            <sourceRootList>
+                <sourceRootElem>uart</sourceRootElem>
+                <sourceRootElem>i2c</sourceRootElem>
+                <sourceRootElem>../I2C.X</sourceRootElem>
+            </sourceRootList>
             <confList>
                 <confElem>
                     <name>default</name>
-                    <type>3</type>
+                    <type>2</type>
                 </confElem>
             </confList>
             <formatting>

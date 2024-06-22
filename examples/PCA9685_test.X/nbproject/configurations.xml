@@ -4,7 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>../I2C.X/i2c.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -14,7 +13,6 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>main.c</itemPath>
-      <itemPath>main.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -22,11 +20,6 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
-  <sourceRootList>
-    <Elem>uart</Elem>
-    <Elem>i2c</Elem>
-    <Elem>../I2C.X</Elem>
-  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">
@@ -35,13 +28,13 @@
         <targetDevice>ATmega4809</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>pk4hybrid</platformTool>
+        <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>2.36</languageToolchainVersion>
         <platform>4</platform>
       </toolsSet>
       <packs>
-        <pack name="ATmega_DFP" vendor="Microchip" version="2.4.131"/>
+        <pack name="ATmega_DFP" vendor="Microchip" version="3.0.158"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -49,54 +42,54 @@
         <linkerTool>
           <linkerLibItems>
             <linkerLibProjectItem>
-              <makeArtifact PL="../I2C.X"
+              <makeArtifact PL="../../uart/UART-ATMega4809.X"
                             CT="3"
                             CN="default"
                             AC="true"
                             BL="true"
-                            WD="../I2C.X"
+                            WD="../../uart/UART-ATMega4809.X"
                             BC="${MAKE}  -f Makefile CONF=default"
                             DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
                             CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
-                            OP="dist/default/production/I2C.X.a"
-                            DOP="dist/default/debug/I2C.X.a"
-                            FL="dist/default/production/I2C.X.a"
-                            PD="dist/default/production/I2C.X.a"
-                            DD="dist/default/debug/I2C.X.a">
+                            OP="dist/default/production/UART-ATMega4809.X.a"
+                            DOP="dist/default/debug/UART-ATMega4809.X.a"
+                            FL="dist/default/production/UART-ATMega4809.X.a"
+                            PD="dist/default/production/UART-ATMega4809.X.a"
+                            DD="dist/default/debug/UART-ATMega4809.X.a">
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibProjectItem>
-              <makeArtifact PL="../UART.X"
+              <makeArtifact PL="../../PCA9685.X"
                             CT="3"
                             CN="default"
                             AC="true"
                             BL="true"
-                            WD="../UART.X"
+                            WD="../../PCA9685.X"
                             BC="${MAKE}  -f Makefile CONF=default"
                             DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
                             CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
-                            OP="dist/default/production/UART.X.a"
-                            DOP="dist/default/debug/UART.X.a"
-                            FL="dist/default/production/UART.X.a"
-                            PD="dist/default/production/UART.X.a"
-                            DD="dist/default/debug/UART.X.a">
+                            OP="dist/default/production/PCA9685.X.a"
+                            DOP="dist/default/debug/PCA9685.X.a"
+                            FL="dist/default/production/PCA9685.X.a"
+                            PD="dist/default/production/PCA9685.X.a"
+                            DD="dist/default/debug/PCA9685.X.a">
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibProjectItem>
-              <makeArtifact PL="../MPU-6050.X"
+              <makeArtifact PL="../../i2c/I2C-ATMega4809.X"
                             CT="3"
                             CN="default"
                             AC="true"
                             BL="true"
-                            WD="../MPU-6050.X"
+                            WD="../../i2c/I2C-ATMega4809.X"
                             BC="${MAKE}  -f Makefile CONF=default"
                             DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
                             CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
-                            OP="dist/default/production/MPU-6050.X.a"
-                            DOP="dist/default/debug/MPU-6050.X.a"
-                            FL="dist/default/production/MPU-6050.X.a"
-                            PD="dist/default/production/MPU-6050.X.a"
-                            DD="dist/default/debug/MPU-6050.X.a">
+                            OP="dist/default/production/I2C-ATMega4809.X.a"
+                            DOP="dist/default/debug/I2C-ATMega4809.X.a"
+                            FL="dist/default/production/I2C-ATMega4809.X.a"
+                            PD="dist/default/production/I2C-ATMega4809.X.a"
+                            DD="dist/default/debug/I2C-ATMega4809.X.a">
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
@@ -218,7 +211,10 @@
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="event.recorder.enabled" value="false"/>
+        <property key="event.recorder.scvd.files" value=""/>
         <property key="freeze.timers" value="false"/>
+        <property key="lastid" value=""/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
         <property key="memories.configurationmemory" value="true"/>
@@ -233,9 +229,7 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-5fff"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="/Users/ben/proj/atmega4809-stuff/mpu-6050_test.X/debug/default/mpu-6050_test_ptg"/>
-        <property key="programmerToGoImageName" value="mpu-6050_test_ptg"/>
+        <property key="programmerToGoImageName" value="PCA9685_test_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.ledbrightness" value="5"/>
@@ -271,12 +265,15 @@
       </XC8-CO>
       <XC8-config-global>
         <property key="advanced-elf" value="true"/>
+        <property key="constdata-progmem" value="true"/>
         <property key="gcc-opt-driver-new" value="true"/>
         <property key="gcc-opt-std" value="-std=c99"/>
         <property key="gcc-output-file-format" value="dwarf-3"/>
+        <property key="mapped-progmem" value="false"/>
         <property key="omit-pack-options" value="false"/>
         <property key="omit-pack-options-new" value="1"/>
         <property key="output-file-format" value="-mcof,+elf"/>
+        <property key="smart-io-format" value=""/>
         <property key="stack-size-high" value="auto"/>
         <property key="stack-size-low" value="auto"/>
         <property key="stack-size-main" value="auto"/>
@@ -301,7 +298,10 @@
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="event.recorder.enabled" value="false"/>
+        <property key="event.recorder.scvd.files" value=""/>
         <property key="freeze.timers" value="false"/>
+        <property key="lastid" value=""/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
         <property key="memories.configurationmemory" value="true"/>
@@ -316,9 +316,7 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-5fff"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="/Users/ben/proj/atmega4809-stuff/mpu-6050_test.X/debug/default/mpu-6050_test_ptg"/>
-        <property key="programmerToGoImageName" value="mpu-6050_test_ptg"/>
+        <property key="programmerToGoImageName" value="PCA9685_test_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.ledbrightness" value="5"/>

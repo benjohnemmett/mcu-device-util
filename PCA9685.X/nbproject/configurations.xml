@@ -23,7 +23,7 @@
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="default" type="3">
+    <conf name="default" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <targetDevice>ATmega4809</targetDevice>
@@ -42,40 +42,6 @@
       <compileType>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibProjectItem>
-              <makeArtifact PL="../I2C.X"
-                            CT="3"
-                            CN="default"
-                            AC="true"
-                            BL="true"
-                            WD="../I2C.X"
-                            BC="${MAKE}  -f Makefile CONF=default"
-                            DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
-                            CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
-                            OP="dist/default/production/I2C.X.a"
-                            DOP="dist/default/debug/I2C.X.a"
-                            FL="dist/default/production/I2C.X.a"
-                            PD="dist/default/production/I2C.X.a"
-                            DD="dist/default/debug/I2C.X.a">
-              </makeArtifact>
-            </linkerLibProjectItem>
-            <linkerLibProjectItem>
-              <makeArtifact PL="../UART.X"
-                            CT="3"
-                            CN="default"
-                            AC="true"
-                            BL="true"
-                            WD="../UART.X"
-                            BC="${MAKE}  -f Makefile CONF=default"
-                            DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
-                            CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
-                            OP="dist/default/production/UART.X.a"
-                            DOP="dist/default/debug/UART.X.a"
-                            FL="dist/default/production/UART.X.a"
-                            PD="dist/default/production/UART.X.a"
-                            DD="dist/default/debug/UART.X.a">
-              </makeArtifact>
-            </linkerLibProjectItem>
           </linkerLibItems>
         </linkerTool>
         <archiverTool>

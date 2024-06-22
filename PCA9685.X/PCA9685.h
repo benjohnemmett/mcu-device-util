@@ -11,8 +11,9 @@
 #define F_CPU 20000000
 
 #include <xc.h>
+#include <stdint.h>
 #include <util/delay.h>
-#include "../I2C.X/i2c_interface.h"
+#include "../i2c/i2c.h"
 
 #define PCA9685_ADDR 0x40
 #define PCA9685_PRESCALE_50HZ 129
@@ -50,10 +51,10 @@
 extern "C" {
 #endif
 
-    void SetupPca9685(I2cFunctions *i2c_functions, uint8_t prescale);
-    void SetLed(I2cFunctions *i2c_functions, uint8_t led_number, uint16_t pulse_width_ticks);
-    void RunPca9685LightTest(I2cFunctions *i2c_functions);
-    void RunPca9685ServoTest(I2cFunctions *i2c_functions, uint8_t num_servos);
+    void SetupPca9685(uint8_t prescale);
+    void SetLed(uint8_t led_number, uint16_t pulse_width_ticks);
+    void RunPca9685LightTest();
+    void RunPca9685ServoTest(uint8_t num_servos);
 
 #ifdef	__cplusplus
 }

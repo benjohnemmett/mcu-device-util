@@ -7,15 +7,13 @@
 
 #include "main.h"
 #include <xc.h>
-#include <util/delay.h>
-#include "../UART.X/uart.h"
-#include "../I2C.X/i2c.h"
-#include "../I2C.X/i2c_interface.h"
-#include "../MPU-6050.X/mpu_6050.h"
+#include <util/delay.h> // TODO make delay functions hardware agnostic
+#include "../../uart/uart.h"
+#include "../../i2c/i2c.h"
+#include "../../MPU6050.X/mpu_6050.h"
 
 // Helpful example https://github.com/YifanJiangPolyU/MPU6050/blob/master/mpu6050.c
 
-I2cFunctions i2c_functions;
 GyroscopeData gyroscope_data;
 AccelerationData acceleration_data;
 
@@ -24,32 +22,24 @@ int main(void) {
     CCP = CCP_IOREG_gc; //Configuration Change Protection
     CLKCTRL.MCLKCTRLB = 0; //Clock Div = 1
     
-    i2c_functions.f_I2cInitialize = I2cInitialize;
-    i2c_functions.f_I2cWriteByte = I2cWriteByte;
-    i2c_functions.f_I2cWriteBytes = I2cWriteBytes;
-    i2c_functions.f_I2cSendStart = I2cSendStart;
-    i2c_functions.f_I2cWrite = I2cWrite;
-    i2c_functions.f_I2cRead = I2cRead;
-    i2c_functions.f_I2cSendStop = I2cSendStop;
-    
     uart0_init(BAUD_RATE);
     uart0_send_string((char*)"Starting up...\r\n");
     
     I2cInitialize();
-    Mpu_6050_initialize(&i2c_functions);
+    Mpu_6050_initialize();
     
     uint8_t who_am_i = I2cReadByte(MPU_6050_ADDR, MPU_6050_WHO_AM_I);
     uart0_send_string((char*)" I2C Who am I ->");
     uart0_print_u8(who_am_i);
     uart0_send_string((char*)"\r\n");
     
-    SetAccelerometerRange(&i2c_functions, MPU_6050_ADDR, MPU_6050_ACCEL_RANGE_4G_bm);
-    SetGyroscopeRange(&i2c_functions, MPU_6050_ADDR, MPU_6050_GYRO_RANGE_1000_bm);
-    SetDigitalLowPassFilter(&i2c_functions, MPU_6050_ADDR, MPU_6050_DLPF_ACC_BW_5_HZ_bm);
+    SetAccelerometerRange(MPU_6050_ADDR, MPU_6050_ACCEL_RANGE_4G_bm);
+    SetGyroscopeRange(MPU_6050_ADDR, MPU_6050_GYRO_RANGE_1000_bm);
+    SetDigitalLowPassFilter(MPU_6050_ADDR, MPU_6050_DLPF_ACC_BW_5_HZ_bm);
     
     while (1) {
-        ReadAccelerometer(&i2c_functions, MPU_6050_ADDR, ACC_LSB_4G, &acceleration_data);
-        ReadGyroscope(&i2c_functions, MPU_6050_ADDR, GYRO_LSB_1000_DEG_PER_SEC, &gyroscope_data);
+        ReadAccelerometer(MPU_6050_ADDR, ACC_LSB_4G, &acceleration_data);
+        ReadGyroscope(MPU_6050_ADDR, GYRO_LSB_1000_DEG_PER_SEC, &gyroscope_data);
         
         uart0_send_string((char*)"  ACC_X: ");
         uart0_print_s16(((int16_t)(acceleration_data.x_mm_per_sec_squared * 1000)));

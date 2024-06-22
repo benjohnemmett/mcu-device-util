@@ -13,10 +13,7 @@
 #include <stdio.h>
 #include <util/delay.h>
 #include "../../BMP390.X/bmp390.h"
-
-// Hardware Specific Includes
 #include "../../uart/uart.h"
-#include "../../i2c/i2c.h"
 
 char stringBuffer[120];
 

@@ -4,7 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>bmp390.h</itemPath>
+      <itemPath>../I2C.X/i2c.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -13,7 +13,8 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>bmp390.c</itemPath>
+      <itemPath>main.c</itemPath>
+      <itemPath>main.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -21,27 +22,83 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>uart</Elem>
+    <Elem>i2c</Elem>
+    <Elem>../I2C.X</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="default" type="3">
+    <conf name="default" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <targetDevice>ATmega4809</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>pk4hybrid</platformTool>
+        <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>2.36</languageToolchainVersion>
         <platform>4</platform>
       </toolsSet>
       <packs>
-        <pack name="ATmega_DFP" vendor="Microchip" version="3.0.158"/>
+        <pack name="ATmega_DFP" vendor="Microchip" version="2.4.131"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
       <compileType>
         <linkerTool>
           <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../i2c/I2C-ATMega4809.X"
+                            CT="3"
+                            CN="default"
+                            AC="true"
+                            BL="true"
+                            WD="../../i2c/I2C-ATMega4809.X"
+                            BC="${MAKE}  -f Makefile CONF=default"
+                            DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
+                            CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
+                            OP="dist/default/production/I2C-ATMega4809.X.a"
+                            DOP="dist/default/debug/I2C-ATMega4809.X.a"
+                            FL="dist/default/production/I2C-ATMega4809.X.a"
+                            PD="dist/default/production/I2C-ATMega4809.X.a"
+                            DD="dist/default/debug/I2C-ATMega4809.X.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../uart/UART-ATMega4809.X"
+                            CT="3"
+                            CN="default"
+                            AC="true"
+                            BL="true"
+                            WD="../../uart/UART-ATMega4809.X"
+                            BC="${MAKE}  -f Makefile CONF=default"
+                            DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
+                            CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
+                            OP="dist/default/production/UART-ATMega4809.X.a"
+                            DOP="dist/default/debug/UART-ATMega4809.X.a"
+                            FL="dist/default/production/UART-ATMega4809.X.a"
+                            PD="dist/default/production/UART-ATMega4809.X.a"
+                            DD="dist/default/debug/UART-ATMega4809.X.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../MPU6050.X"
+                            CT="3"
+                            CN="default"
+                            AC="true"
+                            BL="true"
+                            WD="../../MPU6050.X"
+                            BC="${MAKE}  -f Makefile CONF=default"
+                            DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
+                            CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
+                            OP="dist/default/production/MPU6050.X.a"
+                            DOP="dist/default/debug/MPU6050.X.a"
+                            FL="dist/default/production/MPU6050.X.a"
+                            PD="dist/default/production/MPU6050.X.a"
+                            DD="dist/default/debug/MPU6050.X.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
           </linkerLibItems>
         </linkerTool>
         <archiverTool>
@@ -141,7 +198,7 @@
         <property key="opt-xc8-linker-file" value="false"/>
         <property key="opt-xc8-linker-link_startup" value="false"/>
         <property key="opt-xc8-linker-serial" value=""/>
-        <property key="program-the-device-with-default-config-words" value="false"/>
+        <property key="program-the-device-with-default-config-words" value="true"/>
         <property key="remove-unused-sections" value="true"/>
       </HI-TECH-LINK>
       <Tool>
@@ -180,8 +237,8 @@
         <property key="memories.programmemory.ranges" value="0-5fff"/>
         <property key="poweroptions.powerenable" value="false"/>
         <property key="programmerToGoFilePath"
-                  value="/Users/ben/proj/ic-devices/BMP390.X/debug/default/BMP390_ptg"/>
-        <property key="programmerToGoImageName" value="BMP390_ptg"/>
+                  value="/Users/ben/proj/atmega4809-stuff/mpu-6050_test.X/debug/default/mpu-6050_test_ptg"/>
+        <property key="programmerToGoImageName" value="mpu-6050_test_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.ledbrightness" value="5"/>
@@ -268,9 +325,7 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-5fff"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="/Users/ben/proj/ic-devices/BMP390.X/debug/default/BMP390_ptg"/>
-        <property key="programmerToGoImageName" value="BMP390_ptg"/>
+        <property key="programmerToGoImageName" value="mpu-6050_test_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.ledbrightness" value="5"/>

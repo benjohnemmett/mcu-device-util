@@ -8,8 +8,8 @@
 #ifndef MPU_6050_H
 #define	MPU_6050_H
 
-#include "../I2C.X/i2c_interface.h"
-#include "../I2C.X/i2c.h"
+#include <stdint.h>
+#include "../i2c/i2c.h"
 
 
 #ifndef __DEFINED_uint8_t
@@ -96,17 +96,17 @@ extern "C" {
     };
     typedef struct AccelerationData AccelerationData;
     
-    void Mpu_6050_initialize(I2cFunctions *i2c_functions);
+    void Mpu_6050_initialize();
     
-    void ReadAccelerometer(I2cFunctions *i2c_functions, uint8_t addr, float lsb_sensitivity, AccelerationData *acceleration_data);
+    void ReadAccelerometer(uint8_t addr, float lsb_sensitivity, AccelerationData *acceleration_data);
     
-    void ReadGyroscope(I2cFunctions *i2c_functions, uint8_t addr, float lsb_sensitivity, GyroscopeData *data_out);
+    void ReadGyroscope(uint8_t addr, float lsb_sensitivity, GyroscopeData *data_out);
     
-    void SetAccelerometerRange(I2cFunctions *i2c_functions, uint8_t addr, uint8_t range_bitmask);
+    void SetAccelerometerRange(uint8_t addr, uint8_t range_bitmask);
     
-    void SetGyroscopeRange(I2cFunctions *i2c_functions, uint8_t addr, uint8_t range_bitmask);
+    void SetGyroscopeRange(uint8_t addr, uint8_t range_bitmask);
     
-    void SetDigitalLowPassFilter(I2cFunctions *i2c_functions, uint8_t addr, uint8_t dlpf_config_bitmask);
+    void SetDigitalLowPassFilter(uint8_t addr, uint8_t dlpf_config_bitmask);
 
 #ifdef	__cplusplus
 }
