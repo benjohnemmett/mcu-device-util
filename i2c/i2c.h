@@ -10,8 +10,6 @@
 
 // Helpful example here: https://www.avrfreaks.net/forum/i2c-communication-atmega4809
 
-#include <avr/io.h>
-#include <util/twi.h>
 #include <stdint.h>
 
 #ifndef F_CPU

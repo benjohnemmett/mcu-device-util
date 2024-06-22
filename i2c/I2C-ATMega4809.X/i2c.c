@@ -1,4 +1,5 @@
-#include "i2c.h"
+#include "../i2c.h"
+#include <util/twi.h>
 
 #define TWI0_BAUD(F_SCL) ( ( ((float)F_CPU / (2 * (float)F_SCL)) ) - 10 )
 

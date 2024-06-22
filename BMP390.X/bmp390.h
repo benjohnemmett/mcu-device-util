@@ -10,8 +10,7 @@
 
 #include <math.h>
 #include <stdint.h>
-#include "../I2C.X/i2c_interface.h"
-#include "../I2C.X/i2c.h"
+#include "../i2c/i2c.h"
 
 #define BMP390_REG_CHIP_ID 0x00
 #define BMP390_REG_REV_ID 0x01
@@ -105,21 +104,21 @@ extern "C" {
     };
     typedef struct Bmp390CalibrationData Bmp390CalibrationData;
     
-    void Bmp390Initialize(I2cFunctions *i2c_functions, char addr, Bmp390CalibrationData *calibration_data);
+    void Bmp390Initialize(char addr, Bmp390CalibrationData *calibration_data);
     
-    void Bmp390GetTrimmingCoefficients(I2cFunctions *i2c_functions, char addr, Bmp390RawTrimmingCoefficients *trimming_coefficients);
+    void Bmp390GetTrimmingCoefficients(char addr, Bmp390RawTrimmingCoefficients *trimming_coefficients);
     
     void Bmp390CalculateCalibrationData(Bmp390RawTrimmingCoefficients *raw_trimming_coefficients, Bmp390CalibrationData *trimming_coefficients);
 
-    float Bmp390ReadTemperatureInC(I2cFunctions *i2c_functions, unsigned char addr, Bmp390CalibrationData *calibration_data);
+    float Bmp390ReadTemperatureInC(unsigned char addr, Bmp390CalibrationData *calibration_data);
             
-    float Bmp390ReadPressureInPa(I2cFunctions *i2c_functions, unsigned char addr, Bmp390CalibrationData *calibration_data);
+    float Bmp390ReadPressureInPa(unsigned char addr, Bmp390CalibrationData *calibration_data);
     
-    void Bmp390SetOverSampleRates(I2cFunctions *i2c_functions, unsigned char addr, unsigned char osr_masks);
+    void Bmp390SetOverSampleRates(unsigned char addr, unsigned char osr_masks);
     
-    void Bmp390SetIirFilterCoefficient(I2cFunctions *i2c_functions, unsigned char addr, unsigned char iir_coeff_mask);
+    void Bmp390SetIirFilterCoefficient(unsigned char addr, unsigned char iir_coeff_mask);
     
-    void Bmp390SetOutputDataRate(I2cFunctions *i2c_functions, unsigned char addr, unsigned char odr_sel_mask);
+    void Bmp390SetOutputDataRate(unsigned char addr, unsigned char odr_sel_mask);
 
 #ifdef	__cplusplus
 }

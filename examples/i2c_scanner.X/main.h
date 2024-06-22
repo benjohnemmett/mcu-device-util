@@ -11,11 +11,14 @@
 #define F_CPU 20000000
 #define BAUD_RATE 9600
 
+// Hardware specific includes
+#include <util/delay.h> // TODO abstract the AVR-specific delay functions
+#include "../../uart/UART-ATMega4809.X/uart.h"
+#include "../../i2c/I2C-ATMega4809.X/i2c.h"
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
-
-
 
 
 #ifdef	__cplusplus

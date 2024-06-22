@@ -8,7 +8,7 @@
 #ifndef UART_H
 #define	UART_H
 
-#include <avr/io.h>
+#include <stdint.h>
 
 #ifndef F_CPU
 #define F_CPU 20000000

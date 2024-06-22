@@ -3,26 +3,22 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>i2c_scanner</name>
-            <creation-uuid>66ed2e9f-d402-4ab9-bf3d-a172539f468c</creation-uuid>
+            <name>I2C-ATMega4809</name>
+            <creation-uuid>04074b50-797e-449d-96c6-33a1cdc1bc81</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>
             <header-extensions>h</header-extensions>
             <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
-            <make-dep-projects>
-                <make-dep-project>../I2C.X</make-dep-project>
-                <make-dep-project>../UART.X</make-dep-project>
-            </make-dep-projects>
+            <make-dep-projects/>
             <sourceRootList>
-                <sourceRootElem>uart</sourceRootElem>
-                <sourceRootElem>i2c</sourceRootElem>
+                <sourceRootElem>..</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
                     <name>default</name>
-                    <type>2</type>
+                    <type>3</type>
                 </confElem>
             </confList>
             <formatting>

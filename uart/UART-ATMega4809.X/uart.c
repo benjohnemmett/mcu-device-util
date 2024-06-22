@@ -1,4 +1,5 @@
-#include "uart.h"
+#include "../uart.h"
+#include <avr/io.h>
 
 //Helpful example: https://github.com/MicrochipTech/TB3216_Getting_Started_with_USART/blob/master/Send_Hello_World/main.c
 

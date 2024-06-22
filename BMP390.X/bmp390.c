@@ -1,14 +1,14 @@
 #include "bmp390.h"
 
-void Bmp390Initialize(I2cFunctions *i2c_functions, char addr, Bmp390CalibrationData *calibration_data) {
-    i2c_functions->f_I2cWriteByte(addr, BMP390_REG_PWR_CTRL, BMP390_PWR_CTRL_START_EVERYTHING_bm);
+void Bmp390Initialize(char addr, Bmp390CalibrationData *calibration_data) {
+    I2cWriteByte(addr, BMP390_REG_PWR_CTRL, BMP390_PWR_CTRL_START_EVERYTHING_bm);
     Bmp390RawTrimmingCoefficients trimming_coefficients;
-    Bmp390GetTrimmingCoefficients(i2c_functions, addr, &trimming_coefficients);
+    Bmp390GetTrimmingCoefficients(addr, &trimming_coefficients);
     Bmp390CalculateCalibrationData(&trimming_coefficients, calibration_data);
 }
 
-void Bmp390GetTrimmingCoefficients(I2cFunctions *i2c_functions, char addr, Bmp390RawTrimmingCoefficients *trimming_coefficients) {
-    i2c_functions->f_I2cReadBytes(addr, BMP390_REG_NVM_PAR_T1, (uint8_t*)trimming_coefficients, BMP390_TRIMMING_COEFFICENT_LENGTH);
+void Bmp390GetTrimmingCoefficients(char addr, Bmp390RawTrimmingCoefficients *trimming_coefficients) {
+    I2cReadBytes(addr, BMP390_REG_NVM_PAR_T1, (uint8_t*)trimming_coefficients, BMP390_TRIMMING_COEFFICENT_LENGTH);
 }
 
 /*
@@ -31,14 +31,14 @@ void Bmp390CalculateCalibrationData(Bmp390RawTrimmingCoefficients *raw_trimming_
     calibration_data->p11 = raw_trimming_coefficients->p11 / exp2(65);
 }
 
-uint32_t Bmp390ReadTemperatureRaw(I2cFunctions *i2c_functions, unsigned char addr) {
-    i2c_functions->f_I2cSendStart(addr, I2C_WRITE);
-    i2c_functions->f_I2cWrite(BMP390_REG_TEMP_DATA_0);
-    i2c_functions->f_I2cSendStart(addr, I2C_READ);
-    unsigned long lsb = i2c_functions->f_I2cRead(I2C_ACK);
-    unsigned long data1 = i2c_functions->f_I2cRead(I2C_ACK);
-    unsigned long msb = i2c_functions->f_I2cRead(I2C_NACK);
-    i2c_functions->f_I2cSendStop();
+uint32_t Bmp390ReadTemperatureRaw(unsigned char addr) {
+    I2cSendStart(addr, I2C_WRITE);
+    I2cWrite(BMP390_REG_TEMP_DATA_0);
+    I2cSendStart(addr, I2C_READ);
+    unsigned long lsb = I2cRead(I2C_ACK);
+    unsigned long data1 = I2cRead(I2C_ACK);
+    unsigned long msb = I2cRead(I2C_NACK);
+    I2cSendStop();
     unsigned long raw_temp = (msb << 16) | (data1 << 8) | lsb;
     
     return raw_temp;
@@ -59,21 +59,21 @@ float Bmp390CompensateTempterature(uint32_t uncomp_temp, Bmp390CalibrationData *
     return calibration_data->t_lin;
 }
 
-float Bmp390ReadTemperatureInC(I2cFunctions *i2c_functions, unsigned char addr, Bmp390CalibrationData *calibration_data) {
-    uint32_t raw_temperature = Bmp390ReadTemperatureRaw(i2c_functions, addr);
+float Bmp390ReadTemperatureInC(unsigned char addr, Bmp390CalibrationData *calibration_data) {
+    uint32_t raw_temperature = Bmp390ReadTemperatureRaw(addr);
     float temperature_c = Bmp390CompensateTempterature(raw_temperature, calibration_data);
     
     return temperature_c;
 }
 
-uint32_t Bmp390ReadPressureRaw(I2cFunctions *i2c_functions, unsigned char addr) {
-    i2c_functions->f_I2cSendStart(addr, I2C_WRITE);
-    i2c_functions->f_I2cWrite(BMP390_REG_PRESSURE_DATA_0);
-    i2c_functions->f_I2cSendStart(addr, I2C_READ);
-    unsigned long lsb = i2c_functions->f_I2cRead(I2C_ACK);
-    unsigned long data1 = i2c_functions->f_I2cRead(I2C_ACK);
-    unsigned long msb = i2c_functions->f_I2cRead(I2C_NACK);
-    i2c_functions->f_I2cSendStop();
+uint32_t Bmp390ReadPressureRaw(unsigned char addr) {
+    I2cSendStart(addr, I2C_WRITE);
+    I2cWrite(BMP390_REG_PRESSURE_DATA_0);
+    I2cSendStart(addr, I2C_READ);
+    unsigned long lsb = I2cRead(I2C_ACK);
+    unsigned long data1 = I2cRead(I2C_ACK);
+    unsigned long msb = I2cRead(I2C_NACK);
+    I2cSendStop();
     unsigned long raw_pressure = (msb << 16) | (data1 << 8) | lsb;
     
     return raw_pressure;
@@ -109,21 +109,21 @@ float Bmp390CompensatePressure(uint32_t uncomp_press, Bmp390CalibrationData *cal
     return comp_press;
 }
 
-float Bmp390ReadPressureInPa(I2cFunctions *i2c_functions, unsigned char addr, Bmp390CalibrationData *calibration_data) {
-    unsigned long uncomp_pressure = Bmp390ReadPressureRaw(i2c_functions, addr);
+float Bmp390ReadPressureInPa(unsigned char addr, Bmp390CalibrationData *calibration_data) {
+    unsigned long uncomp_pressure = Bmp390ReadPressureRaw(addr);
     float pressure_pa = Bmp390CompensatePressure(uncomp_pressure, calibration_data);
     
     return pressure_pa;
 }
 
-void Bmp390SetOverSampleRates(I2cFunctions *i2c_functions, unsigned char addr, unsigned char osr_masks) {
-    i2c_functions->f_I2cWriteByte(addr, BMP390_REG_OSR, osr_masks);
+void Bmp390SetOverSampleRates(unsigned char addr, unsigned char osr_masks) {
+    I2cWriteByte(addr, BMP390_REG_OSR, osr_masks);
 }
 
-void Bmp390SetIirFilterCoefficient(I2cFunctions *i2c_functions, unsigned char addr, unsigned char iir_coeff_mask) {
-    i2c_functions->f_I2cWriteByte(addr, BMP390_REG_CONFIG, iir_coeff_mask);
+void Bmp390SetIirFilterCoefficient(unsigned char addr, unsigned char iir_coeff_mask) {
+    I2cWriteByte(addr, BMP390_REG_CONFIG, iir_coeff_mask);
 }
 
-void Bmp390SetOutputDataRate(I2cFunctions *i2c_functions, unsigned char addr, unsigned char odr_sel_mask) {
-    i2c_functions->f_I2cWriteByte(addr, BMP390_REG_ODR, odr_sel_mask);
+void Bmp390SetOutputDataRate(unsigned char addr, unsigned char odr_sel_mask) {
+    I2cWriteByte(addr, BMP390_REG_ODR, odr_sel_mask);
 }

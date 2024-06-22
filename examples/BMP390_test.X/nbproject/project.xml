@@ -3,22 +3,22 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>I2C</name>
-            <creation-uuid>04074b50-797e-449d-96c6-33a1cdc1bc81</creation-uuid>
+            <name>BMP390_test</name>
+            <creation-uuid>264f9c1d-1d32-46c1-9ec9-1a63d4eb3400</creation-uuid>
             <make-project-type>0</make-project-type>
-            <c-extensions>c</c-extensions>
-            <cpp-extensions/>
-            <header-extensions>h</header-extensions>
-            <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
-            <make-dep-projects/>
+            <make-dep-projects>
+                <make-dep-project>../../uart/UART-ATMega4809.X</make-dep-project>
+                <make-dep-project>../../BMP390.X</make-dep-project>
+                <make-dep-project>../../i2c/I2C-ATMega4809.X</make-dep-project>
+            </make-dep-projects>
             <sourceRootList>
-                <sourceRootElem>../mpu-6050_test.X/i2c</sourceRootElem>
+                <sourceRootElem>../../BMP390.X</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
                     <name>default</name>
-                    <type>3</type>
+                    <type>2</type>
                 </confElem>
             </confList>
             <formatting>

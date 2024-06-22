@@ -6,10 +6,7 @@
  */
 
 #include <xc.h>
-#include <util/delay.h>
 #include "main.h"
-#include "../UART.X/uart.h"
-#include "../I2C.X/i2c.h"
 
 int main(void) {
     // Set CPU clock divider to 1

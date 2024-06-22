@@ -7,34 +7,23 @@
 
 #define F_CPU 20000000
 #define BAUD_RATE 9600
-
 #define BMP390_ADDRESS 0b01110110
 
 #include <xc.h>
-#include <util/delay.h>
 #include <stdio.h>
-#include "../UART.X/uart.h"
-#include "../I2C.X/i2c.h"
-#include "../I2C.X/i2c_interface.h"
-#include "../BMP390.X/bmp390.h"
+#include <util/delay.h>
+#include "../../BMP390.X/bmp390.h"
 
-I2cFunctions i2c_functions;
+// Hardware Specific Includes
+#include "../../uart/uart.h"
+#include "../../i2c/i2c.h"
+
 char stringBuffer[120];
 
 int main(void) {
     // Set CPU clock divider to 1
     CCP = CCP_IOREG_gc; //Configuration Change Protection
     CLKCTRL.MCLKCTRLB = 0; //Clock Div = 1
-    
-    i2c_functions.f_I2cInitialize = I2cInitialize;
-    i2c_functions.f_I2cWriteByte = I2cWriteByte;
-    i2c_functions.f_I2cWriteBytes = I2cWriteBytes;
-    i2c_functions.f_I2cReadByte = I2cReadByte;
-    i2c_functions.f_I2cReadBytes = I2cReadBytes;
-    i2c_functions.f_I2cSendStart = I2cSendStart;
-    i2c_functions.f_I2cWrite = I2cWrite;
-    i2c_functions.f_I2cRead = I2cRead;
-    i2c_functions.f_I2cSendStop = I2cSendStop;
     
     uart0_init(BAUD_RATE);
     uart0_send_string((char*)"* * * * * *\r\n\0");
@@ -53,7 +42,7 @@ int main(void) {
     uart0_send_string((char*)"\r\n\0");
     
     Bmp390CalibrationData calibration_data;
-    Bmp390Initialize(&i2c_functions, BMP390_ADDRESS, &calibration_data);
+    Bmp390Initialize(BMP390_ADDRESS, &calibration_data);
     
     sprintf(stringBuffer, "t1 = %g\r\n", calibration_data.t1);
     uart0_send_string(stringBuffer);
@@ -84,19 +73,19 @@ int main(void) {
     sprintf(stringBuffer, "p11 = %g\r\n", calibration_data.p11);
     uart0_send_string(stringBuffer);
     
-    Bmp390SetIirFilterCoefficient(&i2c_functions, BMP390_ADDRESS, BMP390_IIR_FILTER_COEF_3_bm);
-    Bmp390SetOverSampleRates(&i2c_functions, BMP390_ADDRESS, BMP390_OSR_PRESSURE_8x_bm & BMP390_OSR_TEMPERATURE_1x_bm);
-    Bmp390SetOutputDataRate(&i2c_functions, BMP390_ADDRESS, BMP390_ODR_6p25_HZ);
+    Bmp390SetIirFilterCoefficient(BMP390_ADDRESS, BMP390_IIR_FILTER_COEF_3_bm);
+    Bmp390SetOverSampleRates(BMP390_ADDRESS, BMP390_OSR_PRESSURE_8x_bm & BMP390_OSR_TEMPERATURE_1x_bm);
+    Bmp390SetOutputDataRate(BMP390_ADDRESS, BMP390_ODR_6p25_HZ);
     
     while (1) {
-        float temp_c = Bmp390ReadTemperatureInC(&i2c_functions, BMP390_ADDRESS, &calibration_data);
+        float temp_c = Bmp390ReadTemperatureInC(BMP390_ADDRESS, &calibration_data);
         float temp_f = temp_c * 1.8 + 32;
         sprintf(stringBuffer, "\r\nTemp is %f C\r\n", temp_c);
         uart0_send_string(stringBuffer);
         sprintf(stringBuffer, "Temp is %f F\r\n", temp_f);
         uart0_send_string(stringBuffer);
         
-        float pressure_pa = Bmp390ReadPressureInPa(&i2c_functions, BMP390_ADDRESS, &calibration_data);
+        float pressure_pa = Bmp390ReadPressureInPa(BMP390_ADDRESS, &calibration_data);
         sprintf(stringBuffer, "Pressure is %f pa\r\n", pressure_pa);
         uart0_send_string(stringBuffer);
         
