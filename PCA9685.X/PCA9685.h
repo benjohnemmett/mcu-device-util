@@ -53,6 +53,7 @@ extern "C" {
 
     void SetupPca9685(uint8_t prescale);
     void SetLed(uint8_t led_number, uint16_t pulse_width_ticks);
+    void SetServo(uint8_t servo_number, float position);
     void RunPca9685LightTest();
     void RunPca9685ServoTest(uint8_t num_servos);
 
